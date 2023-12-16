@@ -1,0 +1,88 @@
+dataset:
+  # train_root: /media/luo/new/SDW/all_dataset/ISIC2018
+  # train_img_root : /media/luo/new/SDW/all_dataset/ISIC2018/imagesTr
+  # train_label_root: /media/luo/new/SDW/all_dataset/ISIC2018/labelsTr
+
+  # test_ISIC2018_img: /media/luo/new/SDW/all_dataset/ISIC2018/imagesTs
+  # test_ISIC2018_label: /media/luo/new/SDW/all_dataset/ISIC2018/labelsTs
+  test_img: /media/luo/new/SDW/all_dataset/ISIC2018/ISIC2018_Task1-2_Training_Input
+  test_lab: /media/luo/new/SDW/all_dataset/ISIC2018/ISIC2018_Task1_Training_GroundTruth
+  all_size: /media/luo/new/SDW/all_dataset/ISIC2018/train/ori_size.pkl
+
+  test_use_npz: True  # 设为True则需要将need_upsample设为False
+  dataset_directory: /media/luo/new/SDW/all_dataset/ISIC2018
+  data_type: '2'
+  fold: all
+  dsplit: 'tt'
+
+  num_classes: 1
+
+  crop_size : 
+      w: 512
+      h: 512
+  batch_size : 16
+  num_workers : 8
+
+Train_transform_list:
+  NO_custom: True
+  # Custom_resize: 
+  #     size_h: 352
+  #     size_w: 352
+  Custom_random_scale_crop:
+      range: [0.75, 1.25]
+  Custom_random_vertical_flip: NULL
+  Custom_random_horizontal_flip: NULL
+  Custom_random_rotate:
+      range: [0, 359]
+  Custom_random_image_enhance:
+      methods: ['contrast', 'sharpness', 'brightness']
+  Custom_random_dilation_erosion:
+      kernel_range: [2, 5]
+  # normalize: 
+  #     mean: [0.485, 0.456, 0.406]
+  #     std: [0.229, 0.224, 0.225]
+
+Val_transform_list:
+  NO_custom: True
+  Test_resize: 
+      # size: [512, 512]
+      size_h: 512
+      size_w: 512
+  # tonumpy: NULL
+  # normalize: 
+  #     mean: [0.485, 0.456, 0.406]
+  #     std: [0.229, 0.224, 0.225]
+  # totensor: NULL
+
+Test_transform_list:
+  NO_custom: False
+  Test_resize: 
+      # size: [512, 512]
+      size_h: 512
+      size_w: 512
+  # normalize: 
+  #     mean: [0.485, 0.456, 0.406]
+  #     std: [0.229, 0.224, 0.225]
+  
+model:
+  model_name : unext
+
+training:
+  trainer: SHFormerTrainer
+  validation_only: True  # False表示训练
+  max_num_epochs: 200
+  warm_up_epochs: 5
+  optimizer: Adam
+  lr_scheduler: None
+  lr_scheduler_eps: !!float 1e-3
+  lr_scheduler_patience: 30
+  initial_lr: !!float 1e-4  # !!int str：表示将str转int
+  weight_decay: !!float 1e-4
+  deterministic: False
+  fp16: True
+
+validation:
+  valbest: True   # True表示使用best模型进行预测，否则即为最后保存的模型
+
+output:
+  outpath: Trainer_SHFormer
