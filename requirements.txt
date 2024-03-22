@@ -16,5 +16,6 @@ ptflops==0.6.9
 tabulate==0.8.10
 thop==0.0.31.post2005241907
 timm==0.6.12
+pandas
 torchinfo
 warmup_scheduler

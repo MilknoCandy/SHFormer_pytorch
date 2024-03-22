@@ -1,9 +1,9 @@
 """
-❤Descripttion: your project
+❤Descripttion: train or test SHFormer
 ❤version: 1.0
 ❤Author: MilknoCandy
 ❤Date: 2022-11-30 09:13:08
-❤LastEditTime: 2024-03-22 10:33:36
+❤LastEditTime: 2024-03-22 15:40:51
 ❤Github: https://github.com/MilknoCandy
 """
 import os
@@ -30,7 +30,7 @@ def main():
     parser.add_argument("--disable_saving", required=False, action='store_true',
                         help="If set, trainer will not save any parameter files. Useful for development when you are "
                             "only interested in the results and want to save some disk space")
-    parser.add_argument("--pretrain_pth", required=False, type=str, default='pretrained_params/shformer_add.pth',
+    parser.add_argument("--pretrain_pth", required=False, type=str, default=False,
                         help="If set, trainer will load pretrained params")
 
     args = parser.parse_args()
