@@ -1,10 +1,4 @@
 dataset:
-  # train_root: /media/luo/new/SDW/all_dataset/ISIC2018
-  # train_img_root : /media/luo/new/SDW/all_dataset/ISIC2018/imagesTr
-  # train_label_root: /media/luo/new/SDW/all_dataset/ISIC2018/labelsTr
-
-  # test_ISIC2018_img: /media/luo/new/SDW/all_dataset/ISIC2018/imagesTs
-  # test_ISIC2018_label: /media/luo/new/SDW/all_dataset/ISIC2018/labelsTs
   test_img: /media/luo/new/SDW/all_dataset/ISIC2018/ISIC2018_Task1-2_Training_Input
   test_lab: /media/luo/new/SDW/all_dataset/ISIC2018/ISIC2018_Task1_Training_GroundTruth
   all_size: /media/luo/new/SDW/all_dataset/ISIC2018/train/ori_size.pkl
@@ -69,7 +63,7 @@ model:
 
 training:
   trainer: SHFormerTrainer
-  validation_only: False  # False表示训练
+  validation_only: True  # False means Training
   max_num_epochs: 200
   warm_up_epochs: 5
   optimizer: Adam
@@ -83,6 +77,7 @@ training:
 
 validation:
   valbest: True   # True表示使用best模型进行预测，否则即为最后保存的模型
+  valpretrain: True
 
 output:
   # outpath: Trainer_SHFormertest

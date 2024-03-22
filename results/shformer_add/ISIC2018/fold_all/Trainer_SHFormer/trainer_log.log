@@ -1,0 +1,6 @@
+2024-03-22 10:34:06.448 | INFO     | utils.default_configuration:get_default_configuration:43 - 
+#############################################################################
+I am running the following Net: shformer_add
+My trainer class is: <class 'training.trainer.SHFormerTrainer.SHFormerTrainer'>
+I am using data from this folder: /media/luo/new/SDW/all_dataset/ISIC2018
+#############################################################################

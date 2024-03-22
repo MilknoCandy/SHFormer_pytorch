@@ -3,7 +3,7 @@
 ❤version: 1.0
 ❤Author: MilknoCandy
 ❤Date: 2022-12-07 08:38:29
-❤LastEditTime: 2023-12-16 21:08:50
+❤LastEditTime: 2024-03-22 10:12:38
 ❤Github: https://github.com/MilknoCandy
 """
 # ---------------------------------------------------------------
@@ -489,10 +489,9 @@ class DWConv(nn.Module):
 
 
 
-# @BACKBONES.register_module()
-class mit_b0(MixVisionTransformer):
+class mvt_b0(MixVisionTransformer):
     def __init__(self, **kwargs):
-        super(mit_b0, self).__init__(
+        super(mvt_b0, self).__init__(
             patch_size=4, embed_dims=[32, 64, 160, 256], num_heads=[1, 2, 5, 8], mlp_ratios=[4, 4, 4, 4],
             qkv_bias=True, norm_layer=partial(nn.LayerNorm, eps=1e-6), depths=[1, 1, 1, 1], sr_ratios=[8, 4, 2, 1],
             drop_rate=0.0, drop_path_rate=0.1)

@@ -3,7 +3,7 @@
 ❤version: 1.0
 ❤Author: MilknoCandy
 ❤Date: 2022-11-29 10:51:56
-❤LastEditTime: 2023-11-24 09:20:12
+❤LastEditTime: 2024-03-22 10:33:08
 ❤Github: https://github.com/MilknoCandy
 """
 import sys
@@ -487,7 +487,6 @@ class NetworkTrainer(object):
             checkpoint (_type_): checkpoint loaded into ram.
             train (bool, optional): _description_. Defaults to True.
         """
-        # HACK: why
         if not self.was_initialized:
             self.initialize(train)
         # HACK：当使用多GPU训练的时候回来添加，这时self.network只需要网络的参数
@@ -498,10 +497,9 @@ class NetworkTrainer(object):
                 self.amp_grad_scaler.load_state_dict(checkpoint['amp_grad_scaler'])
 
         if pretrained:
-            # 如果想用之前训练好的且接着训练，那就不能装载epoch等训练参数
-            pretrain_checpoint = checkpoint["state_dict"]   # 一般参数名
-            # pretrain_checpoint = checkpoint   # Segformer的mit_b0
-            # pretrain_checpoint = checkpoint["model_state_dict"]
+            # if you want to use pretrained params, you don't need to load training params such as epoch, etc.
+            # pretrain_checpoint = checkpoint["state_dict"]
+            pretrain_checpoint = checkpoint["model_state_dict"] if 'model_state_dict' in checkpoint.keys() else checkpoint
             # 筛选相同名字的参数值
             model_dict = self.network.state_dict()
             state_dict = {k:v for k,v in pretrain_checpoint.items() if k in model_dict.keys()}
@@ -559,10 +557,18 @@ class NetworkTrainer(object):
         saved_model = torch.load(fname, map_location=torch.device('cpu'))
         self.load_checkpoint_ram(saved_model, train, pretrained)
 
+    def load_pretrain_checkpoint(self, train=True, pretrained_pth=None):
+        self.print_to_log_file("Loading pretrained checkpoint", pretrained_pth, "train=", train)
+        if not self.was_initialized:
+            self.initialize(train)
+        # tricks for me
+        saved_model = torch.load(pretrained_pth, map_location=torch.device('cpu'))
+        self.load_checkpoint_ram(saved_model, train, pretrained=True)
+
     def load_best_checkpoint(self, train=True):
         if self.fold is None:
             raise RuntimeError("Cannot load best checkpoint if self.fold is None")
-        # HACK：后缀为.model是啥意思
+
         if isfile(join(self.output_folder, 'model_best.model')):
             self.load_checkpoint(join(self.output_folder, 'model_best.model'), train=train)
         else:
@@ -593,7 +599,7 @@ class NetworkTrainer(object):
         _ = self.tr_gen
         _ = self.val_gen
 
-        # 清空缓存
+        # emptify GPU memory cache
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
 

@@ -3,7 +3,7 @@
 ❤version: 1.0
 ❤Author: MilknoCandy
 ❤Date: 2022-11-30 09:13:08
-❤LastEditTime: 2023-12-16 21:29:32
+❤LastEditTime: 2024-03-22 10:33:36
 ❤Github: https://github.com/MilknoCandy
 """
 import os
@@ -28,8 +28,10 @@ def main():
     parser.add_argument("-c", "--continue_training", help="use this if you want to continue a training",
                         action="store_true", default=False)
     parser.add_argument("--disable_saving", required=False, action='store_true',
-                        help="If set, nnU-Net will not save any parameter files. Useful for development when you are "
+                        help="If set, trainer will not save any parameter files. Useful for development when you are "
                             "only interested in the results and want to save some disk space")
+    parser.add_argument("--pretrain_pth", required=False, type=str, default='pretrained_params/shformer_add.pth',
+                        help="If set, trainer will load pretrained params")
 
     args = parser.parse_args()
     
@@ -48,6 +50,7 @@ def main():
 
     deterministic = cfg.training.deterministic
     valbest = cfg.validation.valbest
+    valpretrain = cfg.validation.valpretrain    # use pretrained params for testing
 
     run_mixed_precision = cfg.training.fp16
 
@@ -86,26 +89,29 @@ def main():
 
     # initialize trainer
     trainer.initialize(not validation_only)
+    
+    # load pretrianed params if you have one
+    if args.pretrain_pth:
+        trainer.load_pretrain_checkpoint(train=not validation_only, pretrained_pth=args.pretrain_pth)
 
-    if find_lr:
-        trainer.find_lr()
+    if not validation_only:
+        if args.continue_training:
+            trainer.load_latest_checkpoint()
+        trainer.run_training()
     else:
-        if not validation_only:
-            if args.continue_training:
-                trainer.load_latest_checkpoint()
-            trainer.run_training()
+        if valpretrain:
+            pass
+        elif valbest:
+            trainer.load_best_checkpoint(train=False)
         else:
-            if valbest:
-                trainer.load_best_checkpoint(train=False)
-            else:
-                trainer.load_final_checkpoint(train=False)
+            trainer.load_final_checkpoint(train=False)
 
-        trainer.validate()
-        # trainer.output_seg(save_output_folder="predict_results")
-        # trainer.eval_speed(input_size=(1, 3, 512, 512))
-        # trainer.uncertain_visualize(output_file="uncertainty_visualize")
-        # trainer.featmap_vis(output_file="featmap_visualize", method="gradcam", layer_aggregate=True)
-        # trainer.featmap_vis(output_file="mask_visualize")
+    trainer.validate()
+    # trainer.output_seg(save_output_folder="predict_results")
+    # trainer.eval_speed(input_size=(1, 3, 512, 512))
+    # trainer.uncertain_visualize(output_file="uncertainty_visualize")
+    # trainer.featmap_vis(output_file="featmap_visualize", method="gradcam", layer_aggregate=True)
+    # trainer.featmap_vis(output_file="mask_visualize")
 
 if __name__ == '__main__':
     main()

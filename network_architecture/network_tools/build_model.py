@@ -1,12 +1,11 @@
 """
-❤Descripttion: your project
+❤Descripttion: build neural network
 ❤version: 1.0
 ❤Author: MilknoCandy
 ❤Date: 2022-12-01 08:54:00
-❤LastEditTime: 2023-12-16 21:05:51
+❤LastEditTime: 2024-03-22 10:39:26
 ❤Github: https://github.com/MilknoCandy
 """
-import numpy as np
 
 
 def build_network(model_name, num_classes=1):
@@ -171,15 +170,4 @@ def build_network(model_name, num_classes=1):
     if model_name == "unet++":
         from ..unet.UNet_nested import UNet_Nested
         model = UNet_Nested(in_channels=3, n_classes=num_classes, is_ds=True)
-        return model
-    
-############################################   UNeXt
-    if model_name == "unext":
-        from ..unext.UNeXt import UNext
-        model = UNext(num_classes=num_classes)
-        return model
-############################################   CA-Net
-    if model_name == "ca-net":
-        from ..canet.networks.network import Comprehensive_Atten_Unet as CANet
-        model = CANet(out_size=(512, 512), n_classes=num_classes)
         return model

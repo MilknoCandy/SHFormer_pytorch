@@ -3,7 +3,7 @@
 ❤version: 1.0
 ❤Author: MilknoCandy
 ❤Date: 2022-11-30 16:14:27
-❤LastEditTime: 2023-12-03 15:08:59
+❤LastEditTime: 2024-03-21 22:42:43
 ❤Github: https://github.com/MilknoCandy
 """
 import random
@@ -558,15 +558,6 @@ class SHFormerTrainer(NetworkTrainer):
                 end_time-start_time
             )]
             self.print_to_log_file('\n', tabulate(table_data, headers=table_header,tablefmt='psql'))
-            #=================================== save all metrics ===================================#
-            # results_file = join(self.output_folder, f'all_results_{self.cfg.output.outpath[8:]}.json')
-            results_file = join(self.output_folder, f'all_results_{self.cfg.model.model_name}.json')
-            metrics_dict = OrderedDict()
-            all_metrics_dict = all_metrics.__dict__
-            for metric in all_metrics_dict.keys():
-                    # metrics_dict[metric] = all_metrics_dict[metric].avg.item()
-                    metrics_dict[metric] = all_metrics_dict[metric].val
-            save_json(metrics_dict, results_file)
 
     def eval_speed(self, input_size=(1, 3, 512, 512), iters=100):
         print("=============================Testing Speed=============================")

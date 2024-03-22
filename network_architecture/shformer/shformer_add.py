@@ -3,7 +3,7 @@
 ❤version: 1.0
 ❤Author: MilknoCandy
 ❤Date: 2022-12-08 10:59:20
-❤LastEditTime: 2023-02-21 16:51:56
+❤LastEditTime: 2024-03-22 10:21:12
 ❤Github: https://github.com/MilknoCandy
 """
 # ---------------------------------------------------------------
@@ -21,7 +21,7 @@ from functools import partial
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from ..shformer.mix_transformer import mit_b0
+from ..shformer.mix_transformer import mvt_b0
 # from ..shformer.mix_transformer_neo import mit_b0
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 from timm.models.registry import register_model
@@ -39,12 +39,20 @@ class shformer_add(nn.Module):
         ###################################################
         #               Encoder部分
         ###################################################
-        self.backbone = mit_b0()
+        self.backbone = mvt_b0()
         ###################################################
         #               Decoder部分
         ###################################################
         self.decode_heade = decode_head_best(embed_dims=embed_dims, norm_layer=norm_layer, num_classes=num_classes)
         self.apply(InitWeights_He())
+        self._init_weights()
+
+    def _init_weights(self):
+        pretrained_dict = torch.load('/media/luo/new/SDW/Code/SHFormer_pytorch/pretrained_params/mvt_b0.pth')
+        model_dict = self.backbone.state_dict()
+        model_dict.update(pretrained_dict)
+        self.backbone.load_state_dict(model_dict)
+        print("successfully loaded!!!!")
 
     def forward(self, img):
         B, _, H, W = img.size()
