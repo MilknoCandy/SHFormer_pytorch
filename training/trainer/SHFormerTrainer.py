@@ -3,7 +3,7 @@
 ❤version: 1.0
 ❤Author: MilknoCandy
 ❤Date: 2022-11-30 16:14:27
-❤LastEditTime: 2024-03-21 22:42:43
+❤LastEditTime: 2024-03-22 14:47:10
 ❤Github: https://github.com/MilknoCandy
 """
 import random
@@ -19,11 +19,6 @@ import torch.nn.functional as F
 from alive_progress import alive_bar
 from batchgenerators.utilities.file_and_folder_operations import *
 from loguru import logger
-from medpy.metric.binary import assd, hd95
-from monai.metrics import (compute_meandice, compute_meaniou,
-                           compute_surface_dice)
-from monai.metrics.confusion_matrix import (compute_confusion_matrix_metric,
-                                            get_confusion_matrix)
 from ptflops import get_model_complexity_info
 from tabulate import tabulate
 from thop import profile

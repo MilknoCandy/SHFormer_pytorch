@@ -1,12 +1,11 @@
 """
-❤Descripttion: your project
+❤Descripttion: this file is used to compute all metrics
 ❤version: 1.0
 ❤Author: MilknoCandy
 ❤Date: 2022-12-14 17:07:26
-❤LastEditTime: 2023-11-26 18:13:39
+❤LastEditTime: 2024-03-22 15:04:01
 ❤Github: https://github.com/MilknoCandy
 """
-from medpy.metric.binary import assd, hd95
 from monai.metrics.meandice import compute_meandice
 from monai.metrics.meaniou import compute_meaniou
 from monai.metrics.hausdorff_distance import compute_percent_hausdorff_distance
